@@ -15,7 +15,7 @@ import java.util.List;
  */
 
 public class MyRecycleViewAdapter extends RecyclerView.Adapter<MyRecycleViewAdapter.ViewHolder> {
-    private List<ViewHolder> mDataSet;
+//    private List<ViewHolder> mDataSet;
     private List<Person> persons;
 
     public MyRecycleViewAdapter()
@@ -27,7 +27,7 @@ public class MyRecycleViewAdapter extends RecyclerView.Adapter<MyRecycleViewAdap
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.my_item, parent, false);
 
-        return null;
+        return new ViewHolder(v);
     }
 
     @Override
@@ -41,7 +41,7 @@ public class MyRecycleViewAdapter extends RecyclerView.Adapter<MyRecycleViewAdap
 
     @Override
     public int getItemCount() {
-        return mDataSet.size();
+        return persons.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -50,7 +50,7 @@ public class MyRecycleViewAdapter extends RecyclerView.Adapter<MyRecycleViewAdap
         TextView mRole;
 
         // each data item is just a string in this case
-        public ViewHolder(TextView v) {
+        public ViewHolder(View v) {
             super(v);
             mAvartar = (ImageView)v.findViewById(R.id.image);
             mName    = (TextView)v.findViewById(R.id.txt_name);
