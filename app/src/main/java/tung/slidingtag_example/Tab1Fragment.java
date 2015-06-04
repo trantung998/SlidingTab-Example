@@ -13,6 +13,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import slidingtab.adapter.MyRecycleViewAdapter;
+
 /**
  * Created by Edwin on 15/02/2015.
  */

@@ -2,11 +2,18 @@ package tung.slidingtag_example;
 
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+
+import slidingtab.adapter.MainDrawerAdapter;
+import slidingtab.adapter.ViewPageAdapter;
 
 public class MainActivity extends ActionBarActivity {
 
@@ -17,7 +24,25 @@ public class MainActivity extends ActionBarActivity {
     CharSequence Titles[]={"Home","Events"};
     int Numboftabs =2;
 
-    RecyclerView mRecyclerView;
+    //Data for navigtion
+    String TITLES[] = {"Login","Events","Mail","Shop","Travel"};
+    int ICONS[] = {
+            R.mipmap.ic_facebook,
+            R.mipmap.ic_people,
+            R.mipmap.ic_task,
+            R.mipmap.ic_chat,
+            R.mipmap.ic_facebook};
+
+    String NAME = "Tung Tran";
+    String DETAIL = "Programmer at Zonmob";
+    int PROFILE_PIC = R.mipmap.avatar;
+
+    RecyclerView               mRecyclerView;
+    MainDrawerAdapter          mAdapter;
+    DrawerLayout               mDrawerLayout;
+    RecyclerView.LayoutManager mLayoutManager;
+
+    ActionBarDrawerToggle      mDrawerToggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +54,7 @@ public class MainActivity extends ActionBarActivity {
         setSupportActionBar(toolbar);
 
         // Creating The ViewPagerAdapter and Passing Fragment Manager, Titles fot the Tabs and Number Of Tabs.
-        adapter =  new ViewPageAdapter(getSupportFragmentManager(),Titles,Numboftabs);
+        adapter =  new ViewPageAdapter(getSupportFragmentManager(), Titles, Numboftabs);
 
         // Assigning ViewPager View and setting the adapter
         pager = (ViewPager) findViewById(R.id.pager);
@@ -49,6 +74,36 @@ public class MainActivity extends ActionBarActivity {
 
         // Setting the ViewPager For the SlidingTabsLayout
         tabs.setViewPager(pager);
+
+        mRecyclerView  = (RecyclerView)findViewById(R.id.RecyclerView);
+        mAdapter       = new MainDrawerAdapter(TITLES,ICONS,NAME,DETAIL,PROFILE_PIC, getApplicationContext());
+        mLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+
+
+        mDrawerLayout = (DrawerLayout)findViewById(R.id.DrawerLayout);
+        mDrawerToggle = new ActionBarDrawerToggle(this,
+                mDrawerLayout,
+                toolbar,
+                R.string.open_drawer,
+                R.string.close_drawer){
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                // code here will execute once the drawer is opened( As I dont want anything happened whe drawer is
+                // open I am not going to put anything here)
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
+                // Code here will execute once drawer is closed
+            }
+        };
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
+        mDrawerToggle.syncState();
 
     }
 

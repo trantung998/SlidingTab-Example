@@ -11,12 +11,4 @@
         android:icon="@mipmap/ic_search"
         app:showAsAction="ifRoom"
         ></item>
-
-    <item
-        android:id="@+id/action_facebook"
-        android:orderInCategory="300"
-        android:title="Facebook"
-        android:icon="@mipmap/ic_facebook"
-        app:showAsAction="ifRoom"
-        ></item>
 </menu>

@@ -1,4 +1,4 @@
-package tung.slidingtag_example;
+package slidingtab.adapter;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,6 +9,8 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import tung.slidingtag_example.R;
 
 /**
  * Created by Tran on 6/1/2015.

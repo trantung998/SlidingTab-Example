@@ -1,8 +1,12 @@
-package tung.slidingtag_example;
+package slidingtab.adapter;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+
+import tung.slidingtag_example.Tab1Fragment;
+import tung.slidingtag_example.Tab2Fragment;
+
 /**
  * Created by Tran on 6/1/2015.
  */
