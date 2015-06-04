@@ -3,13 +3,10 @@ package slidingtab.adapter;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.ViewGroup;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import org.w3c.dom.Text;
 
 import tung.slidingtag_example.R;
 
@@ -94,14 +91,12 @@ public class MainDrawerAdapter extends RecyclerView.Adapter<MainDrawerAdapter.Vi
             super(view);
             mContext = c;
 
-            itemView.setClickable(true);
-            itemView.setOnClickListener(this);
-
             holderType = type;
             if(type == TYPE_ITEM){
                 textView = (TextView)view.findViewById(R.id.rowText);
                 imageView = (ImageView)view.findViewById(R.id.rowIcon);
-
+                itemView.setClickable(true);
+                itemView.setOnClickListener(this);
             }
             else{
                 profile = (ImageView)view.findViewById(R.id.circleView);
@@ -112,7 +107,7 @@ public class MainDrawerAdapter extends RecyclerView.Adapter<MainDrawerAdapter.Vi
 
         @Override
         public void onClick(View v) {
-            Toast.makeText(mContext,"Item" + getLayoutPosition() ,Toast.LENGTH_SHORT).show();
+
         }
     }
 }

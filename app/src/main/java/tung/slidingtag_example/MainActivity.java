@@ -1,6 +1,8 @@
 package tung.slidingtag_example;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
@@ -8,10 +10,16 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 
+import fragment.Fragment01;
+import fragment.Fragment02;
+import fragment.Fragment03;
 import slidingtab.adapter.MainDrawerAdapter;
 import slidingtab.adapter.ViewPageAdapter;
 
@@ -75,6 +83,7 @@ public class MainActivity extends ActionBarActivity {
         // Setting the ViewPager For the SlidingTabsLayout
         tabs.setViewPager(pager);
 
+        mDrawerLayout = (DrawerLayout)findViewById(R.id.DrawerLayout);
         mRecyclerView  = (RecyclerView)findViewById(R.id.RecyclerView);
         mAdapter       = new MainDrawerAdapter(TITLES,ICONS,NAME,DETAIL,PROFILE_PIC, getApplicationContext());
         mLayoutManager = new LinearLayoutManager(this);
@@ -82,8 +91,37 @@ public class MainActivity extends ActionBarActivity {
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
+        final GestureDetector mGestureDetector = new GestureDetector(MainActivity.this, new GestureDetector.SimpleOnGestureListener() {
 
-        mDrawerLayout = (DrawerLayout)findViewById(R.id.DrawerLayout);
+            @Override public boolean onSingleTapUp(MotionEvent e) {
+                return true;
+            }
+
+        });
+        mRecyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
+            @Override
+            public boolean onInterceptTouchEvent(RecyclerView recyclerView, MotionEvent motionEvent) {
+                View child = recyclerView.findChildViewUnder(motionEvent.getX(), motionEvent.getY());
+
+                if (child != null && mGestureDetector.onTouchEvent(motionEvent)) {
+                    displayFragment(recyclerView.getChildPosition(child) - 1);
+                    Log.e("MainActivity", "Error in creating fragment" + recyclerView.getChildPosition(child));
+                    mDrawerLayout.closeDrawers();
+                    return true;
+
+                }
+
+
+                return false;
+            }
+
+            @Override
+            public void onTouchEvent(RecyclerView recyclerView, MotionEvent motionEvent) {
+
+            }
+        });
+
+
         mDrawerToggle = new ActionBarDrawerToggle(this,
                 mDrawerLayout,
                 toolbar,
@@ -127,5 +165,60 @@ public class MainActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+
+    public void displayFragment(int position) {
+        Fragment fragment = null;
+        switch (position) {
+            case 0:
+                fragment = new Fragment01();
+                break;
+            case 1:
+                fragment = new Fragment02();
+                break;
+            case 2:
+                fragment = new Fragment03();
+                break;
+            case 3:
+                fragment = new Fragment01();
+                break;
+            case 4:
+                fragment = new Fragment02();
+                break;
+            case 5:
+                fragment = new Fragment03();
+                break;
+
+            default:
+                break;
+        }
+        if (fragment != null) {
+            tabs.setActivated(false);
+            android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.layout_container, fragment).commit();
+
+            mDrawerLayout.closeDrawer(mRecyclerView);
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mDrawerLayout.isDrawerOpen(mRecyclerView)) {
+            mDrawerLayout.closeDrawer(mRecyclerView);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    /**
+     * When using the ActionBarDrawerToggle, you must call it during
+     * onPostCreate() and onConfigurationChanged()...
+     */
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        mDrawerToggle.syncState();
     }
 }
