@@ -20,6 +20,7 @@ import android.view.View;
 import fragment.Fragment01;
 import fragment.Fragment02;
 import fragment.Fragment03;
+import fragment.FragmentMain;
 import slidingtab.adapter.MainDrawerAdapter;
 import slidingtab.adapter.ViewPageAdapter;
 
@@ -62,26 +63,26 @@ public class MainActivity extends ActionBarActivity {
         setSupportActionBar(toolbar);
 
         // Creating The ViewPagerAdapter and Passing Fragment Manager, Titles fot the Tabs and Number Of Tabs.
-        adapter =  new ViewPageAdapter(getSupportFragmentManager(), Titles, Numboftabs);
-
-        // Assigning ViewPager View and setting the adapter
-        pager = (ViewPager) findViewById(R.id.pager);
-        pager.setAdapter(adapter);
-
-        // Assiging the Sliding Tab Layout View
-        tabs = (SlidingTabLayout) findViewById(R.id.tabs);
-        tabs.setDistributeEvenly(true); // To make the Tabs Fixed set this true, This makes the tabs Space Evenly in Available width
-
-        // Setting Custom Color for the Scroll bar indicator of the Tab View
-        tabs.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
-            @Override
-            public int getIndicatorColor(int position) {
-                return getResources().getColor(R.color.tabsScrollColor);
-            }
-        });
-
-        // Setting the ViewPager For the SlidingTabsLayout
-        tabs.setViewPager(pager);
+//        adapter =  new ViewPageAdapter(getSupportFragmentManager(), Titles, Numboftabs);
+//
+//        // Assigning ViewPager View and setting the adapter
+//        pager = (ViewPager) findViewById(R.id.pager);
+//        pager.setAdapter(adapter);
+//
+//        // Assiging the Sliding Tab Layout View
+//        tabs = (SlidingTabLayout) findViewById(R.id.tabs);
+//        tabs.setDistributeEvenly(true); // To make the Tabs Fixed set this true, This makes the tabs Space Evenly in Available width
+//
+//        // Setting Custom Color for the Scroll bar indicator of the Tab View
+//        tabs.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
+//            @Override
+//            public int getIndicatorColor(int position) {
+//                return getResources().getColor(R.color.tabsScrollColor);
+//            }
+//        });
+//
+//        // Setting the ViewPager For the SlidingTabsLayout
+//        tabs.setViewPager(pager);
 
         mDrawerLayout = (DrawerLayout)findViewById(R.id.DrawerLayout);
         mRecyclerView  = (RecyclerView)findViewById(R.id.RecyclerView);
@@ -104,7 +105,7 @@ public class MainActivity extends ActionBarActivity {
                 View child = recyclerView.findChildViewUnder(motionEvent.getX(), motionEvent.getY());
 
                 if (child != null && mGestureDetector.onTouchEvent(motionEvent)) {
-                    displayFragment(recyclerView.getChildPosition(child) - 1);
+                    displayFragment(recyclerView.getChildPosition(child));
                     Log.e("MainActivity", "Error in creating fragment" + recyclerView.getChildPosition(child));
                     mDrawerLayout.closeDrawers();
                     return true;
@@ -142,6 +143,9 @@ public class MainActivity extends ActionBarActivity {
         };
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         mDrawerToggle.syncState();
+        if(savedInstanceState == null) {
+            displayFragment(0);
+        }
 
     }
 
@@ -172,16 +176,16 @@ public class MainActivity extends ActionBarActivity {
         Fragment fragment = null;
         switch (position) {
             case 0:
-                fragment = new Fragment01();
+                fragment = new FragmentMain();
                 break;
             case 1:
-                fragment = new Fragment02();
+                fragment = new Fragment01();
                 break;
             case 2:
-                fragment = new Fragment03();
+                fragment = new Fragment02();
                 break;
             case 3:
-                fragment = new Fragment01();
+                fragment = new Fragment03();
                 break;
             case 4:
                 fragment = new Fragment02();
@@ -194,11 +198,10 @@ public class MainActivity extends ActionBarActivity {
                 break;
         }
         if (fragment != null) {
-            tabs.setActivated(false);
+//            tabs.setActivated(false);
             android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.replace(R.id.layout_container, fragment).commit();
-
             mDrawerLayout.closeDrawer(mRecyclerView);
         }
     }

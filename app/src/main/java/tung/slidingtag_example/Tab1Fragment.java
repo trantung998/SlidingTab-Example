@@ -22,9 +22,9 @@ public class Tab1Fragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v =inflater.inflate(R.layout.tab1, container, false);
+        View view =inflater.inflate(R.layout.tab1, container, false);
 
-        RecyclerView mRecyclerView = (RecyclerView)v.findViewById(R.id.my_recycler_view);
+        RecyclerView mRecyclerView = (RecyclerView)view.findViewById(R.id.my_recycler_view);
         mRecyclerView.setHasFixedSize(true);
 
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());
@@ -33,6 +33,7 @@ public class Tab1Fragment extends Fragment {
         MyRecycleViewAdapter adapter = new MyRecycleViewAdapter();
         mRecyclerView.setAdapter(adapter);
 
-        return v;
+
+        return view;
     }
 }

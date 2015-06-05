@@ -12,27 +12,12 @@
         android:id="@+id/layout_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        >
-
+        android:orientation="vertical">
         <include
             android:id="@+id/tool_bar"
             layout="@layout/tool_bar"
             android:layout_height="wrap_content"
             android:layout_width="match_parent" />
-
-        <tung.slidingtag_example.SlidingTabLayout
-            android:id="@+id/tabs"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:elevation="2dp"
-            android:background="@color/ColorPrimary"/>
-
-            <android.support.v4.view.ViewPager
-                android:id="@+id/pager"
-                android:layout_height="match_parent"
-                android:layout_width="match_parent"
-                android:layout_weight="1" />
     </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
