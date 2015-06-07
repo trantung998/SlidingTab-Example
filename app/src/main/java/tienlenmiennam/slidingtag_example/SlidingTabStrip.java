@@ -1,4 +1,4 @@
-package tung.slidingtag_example;
+package tienlenmiennam.slidingtag_example;
 
 /**
  * Created by Tran on 6/1/2015.

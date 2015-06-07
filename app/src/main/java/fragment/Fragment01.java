@@ -6,7 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import tung.slidingtag_example.R;
+import tienlenmiennam.slidingtag_example.R;
 
 
 public class Fragment01 extends Fragment {

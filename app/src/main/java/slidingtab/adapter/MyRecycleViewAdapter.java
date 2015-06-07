@@ -10,7 +10,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-import tung.slidingtag_example.R;
+import tienlenmiennam.slidingtag_example.R;
 
 /**
  * Created by Tran on 6/1/2015.

@@ -1,4 +1,4 @@
-package tung.slidingtag_example;
+package tienlenmiennam.slidingtag_example;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

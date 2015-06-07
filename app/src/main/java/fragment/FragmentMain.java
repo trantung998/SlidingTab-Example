@@ -8,8 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import slidingtab.adapter.ViewPageAdapter;
-import tung.slidingtag_example.R;
-import tung.slidingtag_example.SlidingTabLayout;
+import tienlenmiennam.slidingtag_example.R;
+import tienlenmiennam.slidingtag_example.SlidingTabLayout;
 
 /**
  * Created by user on 6/5/2015.

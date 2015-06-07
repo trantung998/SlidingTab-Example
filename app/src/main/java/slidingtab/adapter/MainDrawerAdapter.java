@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import tung.slidingtag_example.R;
+import tienlenmiennam.slidingtag_example.R;
 
 /**
  * Created by Tran on 6/4/2015.
