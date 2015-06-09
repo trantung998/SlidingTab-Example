@@ -17,7 +17,7 @@ import tienlenmiennam.slidingtag_example.SlidingTabLayout;
 public class FragmentMain extends Fragment{
     public FragmentMain(){}
 
-    CharSequence Titles[]={"Home","Events"};
+    CharSequence Titles[]={"Friends","Home"};
     int Numboftabs =2;
 
     @Override

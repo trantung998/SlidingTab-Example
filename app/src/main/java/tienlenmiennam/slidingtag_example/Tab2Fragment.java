@@ -4,7 +4,10 @@ package tienlenmiennam.slidingtag_example;
  * Created by Tran on 6/1/2015.
  */
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -42,8 +46,19 @@ public class Tab2Fragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mCallbackManager = CallbackManager.Factory.create();
+    }
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View v =inflater.inflate(R.layout.tab2,container,false);
+        //Check internet connection
 
+        //
+        greeting = (TextView) v.findViewById(R.id.textView);
+        profilePictureView = (ProfilePictureView)v.findViewById(R.id.profilePicture);
+        LoginButton loginButton = (LoginButton)v.findViewById(R.id.login_button);
+        loginButton.setFragment(this);
+
+        mCallbackManager = CallbackManager.Factory.create();
         LoginManager.getInstance().registerCallback(mCallbackManager,
                 new FacebookCallback<LoginResult>() {
                     @Override
@@ -84,17 +99,21 @@ public class Tab2Fragment extends Fragment {
 //                handlePendingAction();
             }
         };
-    }
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v =inflater.inflate(R.layout.tab2,container,false);
-        greeting = (TextView) v.findViewById(R.id.textView);
-        profilePictureView = (ProfilePictureView)v.findViewById(R.id.profilePicture);
-        LoginButton loginButton = (LoginButton)v.findViewById(R.id.login_button);
-        loginButton.setFragment(this);
         return v;
     }
 
+    boolean checkInternet() {
+        final ConnectivityManager conMgr = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        final NetworkInfo activeNetwork = conMgr.getActiveNetworkInfo();
+        if (activeNetwork != null && activeNetwork.isConnected()) {
+            // notify user you are online
+            return true;
+        } else {
+            // notify user you are not online
+            Toast.makeText(getActivity(),"No internet connection",Toast.LENGTH_SHORT).show();
+            return false;
+        }
+    }
 
     @Override
     public void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
@@ -103,6 +122,7 @@ public class Tab2Fragment extends Fragment {
     }
 
     private void updateUI() {
+        if(!checkInternet()) return;
         boolean enableButtons = AccessToken.getCurrentAccessToken() != null;
 
         Profile profile = Profile.getCurrentProfile();
@@ -111,6 +131,7 @@ public class Tab2Fragment extends Fragment {
             profilePictureView.setProfileId(profile.getId());
             greeting.setText(getString(R.string.hello_user, profile.getFirstName()));
             Log.d("profile picture uri", profile.getProfilePictureUri(75, 75).toString());
+
             request();
         } else {
             Log.d("UpdateUI" , "profile null");
@@ -144,7 +165,24 @@ public class Tab2Fragment extends Fragment {
     }
 
     public void request() {
-        GraphRequest request = GraphRequest.newMeRequest(
+//        GraphRequest request = GraphRequest.newMeRequest(
+//                AccessToken.getCurrentAccessToken(),
+//                new GraphRequest.GraphJSONObjectCallback() {
+//                    @Override
+//                    public void onCompleted(
+//                            JSONObject object,
+//                            GraphResponse response) {
+//                        // Application code
+//                        Log.d("Json",object.toString());
+//                    }
+//                });
+//        Bundle parameters = new Bundle();
+//        parameters.putString("fields", "id,name,link");
+//        request.setParameters(parameters);
+//        request.executeAsync();
+
+
+        GraphRequest request1 = GraphRequest.newMeRequest(
                 AccessToken.getCurrentAccessToken(),
                 new GraphRequest.GraphJSONObjectCallback() {
                     @Override
@@ -152,12 +190,62 @@ public class Tab2Fragment extends Fragment {
                             JSONObject object,
                             GraphResponse response) {
                         // Application code
-                        Log.d("Json",object.toString());
+//                        Log.d("Json",object.toString());
+                        Log.d("Json",object.optJSONObject("friends").optJSONObject("paging").optString("next"));
                     }
                 });
-        Bundle parameters = new Bundle();
-        parameters.putString("fields", "id,name,link");
-        request.setParameters(parameters);
-        request.executeAsync();
+        Bundle parameters1 = new Bundle();
+        parameters1.putString("fields", "friends");
+        request1.setParameters(parameters1);
+        request1.executeAsync();
+
+
+//        GraphRequest request2 = GraphRequest.newMyFriendsRequest(
+//                AccessToken.getCurrentAccessToken(),
+//                new GraphRequest.GraphJSONArrayCallback() {
+//                    @Override
+//                    public void onCompleted(JSONArray jsonArray, GraphResponse graphResponse) {
+//                        // Application code
+//                        Log.d("Friends",graphResponse.toString());
+//
+//                        try {
+//                            JSONObject json = new JSONObject(graphResponse.toString());
+//                            Log.d("Json",json.toString());
+//                            Log.d("Json",json.optJSONObject("paging").optString("next"));
+//
+//                        } catch (JSONException e) {
+//                            e.printStackTrace();
+//                        }
+//
+//
+//                    }
+//                }
+//        );
+//        request2.executeAsync();
+
+
     }
+
+    void requser1(String nextPage) {
+        GraphRequest request1 = GraphRequest.newMeRequest(
+                AccessToken.getCurrentAccessToken(),
+                new GraphRequest.GraphJSONObjectCallback() {
+                    @Override
+                    public void onCompleted(
+                            JSONObject object,
+                            GraphResponse response) {
+                        // Application code
+//                        Log.d("Json",object.toString());
+                        Log.d("Json", object.optJSONObject("friends").optJSONObject("paging").optString("next"));
+                    }
+                });
+        Bundle parameters1 = new Bundle();
+        parameters1.putString("fields", "friends");
+        request1.setParameters(parameters1);
+
+        request1.executeAsync();
+
+        Util.openUrl
+    }
+
 }
