@@ -28,6 +28,7 @@ import com.facebook.GraphResponse;
 import com.facebook.Profile;
 import com.facebook.ProfileTracker;
 import com.facebook.appevents.AppEventsLogger;
+import com.facebook.login.*;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
@@ -43,6 +44,7 @@ public class Tab2Fragment extends Fragment {
     ProfileTracker profileTracker;
     private ProfilePictureView profilePictureView;
     private TextView greeting;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,9 +96,6 @@ public class Tab2Fragment extends Fragment {
             @Override
             protected void onCurrentProfileChanged(Profile oldProfile, Profile currentProfile) {
                 updateUI();
-                // It's possible that we were waiting for Profile to be populated in order to
-                // post a status update.
-//                handlePendingAction();
             }
         };
         return v;
@@ -143,7 +142,6 @@ public class Tab2Fragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-
         AppEventsLogger.activateApp(getActivity());
         updateUI();
     }
@@ -242,10 +240,53 @@ public class Tab2Fragment extends Fragment {
         Bundle parameters1 = new Bundle();
         parameters1.putString("fields", "friends");
         request1.setParameters(parameters1);
-
         request1.executeAsync();
+    }
 
-        Util.openUrl
+    private class FriendsInfo{
+        private int id;
+        private String name;
+        private int age;
+        private String avatarUrl;
+
+        public FriendsInfo(int id, String name, int age, String avatarUrl) {
+            this.id = id;
+            this.name = name;
+            this.age = age;
+            this.avatarUrl = avatarUrl;
+        }
+
+        public int getId() {
+            return id;
+        }
+
+        public void setId(int id) {
+            this.id = id;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public int getAge() {
+            return age;
+        }
+
+        public void setAge(int age) {
+            this.age = age;
+        }
+
+        public String getAvatarUrl() {
+            return avatarUrl;
+        }
+
+        public void setAvatarUrl(String avatarUrl) {
+            this.avatarUrl = avatarUrl;
+        }
     }
 
 }

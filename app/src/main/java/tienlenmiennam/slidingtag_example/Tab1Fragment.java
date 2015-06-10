@@ -32,8 +32,6 @@ public class Tab1Fragment extends Fragment {
 
         MyRecycleViewAdapter adapter = new MyRecycleViewAdapter();
         mRecyclerView.setAdapter(adapter);
-
-
         return view;
     }
 }
