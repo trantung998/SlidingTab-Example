@@ -4,23 +4,23 @@ package facebook;
  * Created by user on 6/10/2015.
  */
 public class FriendInfo {
-    private int id;
+    private String id;
     private String name;
     private int age;
     private String avatarUrl;
 
-    public FriendInfo(int id, String name, int age, String avatarUrl) {
+    public FriendInfo(String id, String name, int age, String avatarUrl) {
         this.id = id;
         this.name = name;
         this.age = age;
         this.avatarUrl = avatarUrl;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

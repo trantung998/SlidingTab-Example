@@ -28,14 +28,12 @@ public class MyRecycleViewAdapter extends RecyclerView.Adapter<MyRecycleViewAdap
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.my_item, parent, false);
-
         return new ViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Person h = persons.get(position);
-
         holder.mAvartar.setImageResource(h.photoId);
         holder.mRole.setText(h.name);
         holder.mName.setText(h.name);
@@ -81,5 +79,9 @@ public class MyRecycleViewAdapter extends RecyclerView.Adapter<MyRecycleViewAdap
         persons.add(new Person("Emma Wilson", "23 years old", R.mipmap.adore_icon));
         persons.add(new Person("Lavery Maiss", "25 years old", R.mipmap.afterboomicon));
         persons.add(new Person("Lillie Watts", "35 years old", R.mipmap.beatbrickicon));
+        persons.add(new Person("Lillie Watts", "35 years old", R.mipmap.beatbrickicon));
+        persons.add(new Person("Lillie Watts", "35 years old", R.mipmap.beatbrickicon));
+        persons.add(new Person("Lillie Watts", "35 years old", R.mipmap.beatbrickicon));
+
     }
 }
