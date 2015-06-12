@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import tienlenmiennam.slidingtag_example.R;
 
 /**
@@ -28,6 +30,7 @@ public class MainDrawerAdapter extends RecyclerView.Adapter<MainDrawerAdapter.Vi
     private String mEmail;       //String Resource for header view email
 
     private Context mContext;
+    private  String mAvataUrl;
     public MainDrawerAdapter(String[] itemName, int[] itemIcon, String name, String detail, int profile, Context c) {
         mNavTitles = itemName;
         mIcons = itemIcon;
@@ -35,6 +38,7 @@ public class MainDrawerAdapter extends RecyclerView.Adapter<MainDrawerAdapter.Vi
         mProfile = profile;
         mEmail = detail;
         mContext = c;
+        mAvataUrl = "";
     }
 
 
@@ -58,6 +62,7 @@ public class MainDrawerAdapter extends RecyclerView.Adapter<MainDrawerAdapter.Vi
         }
         else{
             viewHolder.profile.setImageResource(mProfile);           // Similarly we set the resources for header view
+            Picasso.with(mContext).load(mAvataUrl).into(viewHolder.profile);
             viewHolder.name.setText(mName);
             viewHolder.email.setText(mEmail);
         }
@@ -75,6 +80,10 @@ public class MainDrawerAdapter extends RecyclerView.Adapter<MainDrawerAdapter.Vi
         }else{
             return TYPE_ITEM;
         }
+    }
+
+    public void updateHeader(String avaUrl, String name){
+
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

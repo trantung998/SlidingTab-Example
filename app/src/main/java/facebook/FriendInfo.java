@@ -8,6 +8,7 @@ public class FriendInfo {
     private String name;
     private int age;
     private String avatarUrl;
+    public FriendInfo(){}
 
     public FriendInfo(String id, String name, int age, String avatarUrl) {
         this.id = id;

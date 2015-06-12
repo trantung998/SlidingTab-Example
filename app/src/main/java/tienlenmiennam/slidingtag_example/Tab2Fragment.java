@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,8 +24,10 @@ import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
+import com.facebook.HttpMethod;
 import com.facebook.Profile;
 import com.facebook.ProfileTracker;
 import com.facebook.appevents.AppEventsLogger;
@@ -33,6 +36,8 @@ import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.facebook.login.widget.ProfilePictureView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -43,6 +48,8 @@ public class Tab2Fragment extends Fragment {
     ProfileTracker profileTracker;
     private ProfilePictureView profilePictureView;
     private TextView greeting;
+
+    boolean isInited = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -94,6 +101,7 @@ public class Tab2Fragment extends Fragment {
         profileTracker = new ProfileTracker() {
             @Override
             protected void onCurrentProfileChanged(Profile oldProfile, Profile currentProfile) {
+                isInited = false;
                 updateUI();
             }
         };
@@ -125,16 +133,18 @@ public class Tab2Fragment extends Fragment {
 
         Profile profile = Profile.getCurrentProfile();
 //        Log.d("profile", profile.getFirstName());
-        if (enableButtons && profile != null) {
+        if (enableButtons && profile != null && !isInited) {
             profilePictureView.setProfileId(profile.getId());
             greeting.setText(getString(R.string.hello_user, profile.getFirstName()));
             Log.d("profile picture uri", profile.getProfilePictureUri(75, 75).toString());
-
-            request();
+            Tab1Fragment.getFriends(0);
+            isInited = true;
         } else {
+            isInited = false;
             Log.d("UpdateUI" , "profile null");
             profilePictureView.setProfileId(null);
             greeting.setText(null);
+            Tab1Fragment.clearList();
         }
     }
 
@@ -161,7 +171,9 @@ public class Tab2Fragment extends Fragment {
         profileTracker.stopTracking();
     }
 
-    public void request() {
+    public static void request(
+//            int offset, int limit
+    ) {
 //        GraphRequest request = GraphRequest.newMeRequest(
 //                AccessToken.getCurrentAccessToken(),
 //                new GraphRequest.GraphJSONObjectCallback() {
@@ -179,67 +191,62 @@ public class Tab2Fragment extends Fragment {
 //        request.executeAsync();
 
 
-        GraphRequest request1 = GraphRequest.newMeRequest(
-                AccessToken.getCurrentAccessToken(),
-                new GraphRequest.GraphJSONObjectCallback() {
-                    @Override
-                    public void onCompleted(
-                            JSONObject object,
-                            GraphResponse response) {
-                        // Application code
-//                        Log.d("Json",object.toString());
-                        Log.d("Json",object.optJSONObject("friends").optJSONObject("paging").optString("next"));
-                    }
-                });
-        Bundle parameters1 = new Bundle();
-        parameters1.putString("fields", "friends");
-        request1.setParameters(parameters1);
-        request1.executeAsync();
-
-
-//        GraphRequest request2 = GraphRequest.newMyFriendsRequest(
+//        GraphRequest request1 = GraphRequest.newMeRequest(
 //                AccessToken.getCurrentAccessToken(),
-//                new GraphRequest.GraphJSONArrayCallback() {
+//                new GraphRequest.GraphJSONObjectCallback() {
 //                    @Override
-//                    public void onCompleted(JSONArray jsonArray, GraphResponse graphResponse) {
+//                    public void onCompleted(
+//                            JSONObject object,
+//                            GraphResponse response) {
 //                        // Application code
-//                        Log.d("Friends",graphResponse.toString());
-//
-//                        try {
-//                            JSONObject json = new JSONObject(graphResponse.toString());
-//                            Log.d("Json",json.toString());
-//                            Log.d("Json",json.optJSONObject("paging").optString("next"));
-//
-//                        } catch (JSONException e) {
-//                            e.printStackTrace();
-//                        }
-//
-//
+////                        Log.d("Json",object.toString());
+//                        Log.d("Json",object.optJSONObject("friends").optJSONObject("paging").optString("next"));
 //                    }
-//                }
-//        );
-//        request2.executeAsync();
+//                });
+//        Bundle parameters1 = new Bundle();
+//        parameters1.putString("fields", "friends");
+//        request1.setParameters(parameters1);
+//        request1.executeAsync();
 
 
-    }
-
-    void requser1(String nextPage) {
-        GraphRequest request1 = GraphRequest.newMeRequest(
+        GraphRequest request2 = GraphRequest.newMyFriendsRequest(
                 AccessToken.getCurrentAccessToken(),
-                new GraphRequest.GraphJSONObjectCallback() {
+                new GraphRequest.GraphJSONArrayCallback() {
                     @Override
-                    public void onCompleted(
-                            JSONObject object,
-                            GraphResponse response) {
+                    public void onCompleted(JSONArray jsonArray, GraphResponse graphResponse) {
                         // Application code
-//                        Log.d("Json",object.toString());
-                        Log.d("Json", object.optJSONObject("friends").optJSONObject("paging").optString("next"));
+                        Log.d("Friends",jsonArray.toString());
+                        Log.d("graphResponse",graphResponse.toString());
+                        Tab1Fragment.updateFriendList(jsonArray);
                     }
-                });
-        Bundle parameters1 = new Bundle();
-        parameters1.putString("fields", "friends");
-        request1.setParameters(parameters1);
-        request1.executeAsync();
+                }
+        );
+        Bundle parameters1 = new Bundle(3);
+        parameters1.putString("fields", "name");
+//        parameters1.putInt("offset", offset);
+//        parameters1.putInt("limit", limit);
+        request2.setParameters(parameters1);
+        Log.e("Path:", request2.getParameters().toString());
+        request2.executeAsync();
     }
+
+//    void requser1(String nextPage) {
+//        GraphRequest request1 = GraphRequest.newMeRequest(
+//                AccessToken.getCurrentAccessToken(),
+//                new GraphRequest.GraphJSONObjectCallback() {
+//                    @Override
+//                    public void onCompleted(
+//                            JSONObject object,
+//                            GraphResponse response) {
+//                        // Application code
+////                        Log.d("Json",object.toString());
+//                        Log.d("Json", object.optJSONObject("friends").optJSONObject("paging").optString("next"));
+//                    }
+//                });
+//        Bundle parameters1 = new Bundle();
+//        parameters1.putString("fields", "friends");
+//        request1.setParameters(parameters1);
+//        request1.executeAsync();
+//    }
 
 }

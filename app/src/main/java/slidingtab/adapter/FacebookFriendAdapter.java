@@ -1,6 +1,7 @@
 package slidingtab.adapter;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,7 +36,7 @@ public class FacebookFriendAdapter extends RecyclerView.Adapter<FacebookFriendAd
         FriendInfo friend = mFriendInfoList.get(position);
         holder.mAvartar.setProfileId(friend.getId());
         holder.mName.setText(friend.getName());
-        holder.mAge.setText(friend.getAge());
+        holder.mAge.setText(friend.getName());
     }
 
     @Override
@@ -44,8 +45,28 @@ public class FacebookFriendAdapter extends RecyclerView.Adapter<FacebookFriendAd
     }
 
     public void update(FriendInfo fr){
-        mFriendInfoList.add(fr);
+        if(isContain(fr)) return;
+        else {
+            mFriendInfoList.add(fr);
+        }
+    }
+
+    public void refresh(){
         notifyDataSetChanged();
+        Log.d("size", "" + mFriendInfoList.size());
+    }
+
+    boolean isContain(FriendInfo fr){
+        String id = fr.getId();
+        for (int i = 0; i < mFriendInfoList.size(); i++) {
+            if(id.equals(mFriendInfoList.get(i).getId())) return true;
+        }
+        return false;
+    }
+
+    public void clear(){
+        mFriendInfoList.clear();
+        refresh();
     }
 
 
@@ -59,7 +80,7 @@ public class FacebookFriendAdapter extends RecyclerView.Adapter<FacebookFriendAd
             super(v);
             mAvartar = (ProfilePictureView)v.findViewById(R.id.profilePicture);
             mName    = (TextView)v.findViewById(R.id.txt_name);
-            mAge    = (TextView)v.findViewById(R.id.txt_age);
+            mAge     = (TextView)v.findViewById(R.id.txt_age);
         }
     }
 }

@@ -14,6 +14,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import facebook.FriendInfo;
+import slidingtab.adapter.FacebookFriendAdapter;
 import slidingtab.adapter.MyRecycleViewAdapter;
 
 /**
@@ -22,9 +27,12 @@ import slidingtab.adapter.MyRecycleViewAdapter;
 public class Tab1Fragment extends Fragment {
 
     private int previousTotal = 0;
-    private boolean loading = true;
+    private static boolean loading = true;
     private int visibleThreshold = 5;
     int firstVisibleItem, visibleItemCount, totalItemCount;
+
+    int friendsListOffset = 0 ;
+    static FacebookFriendAdapter adapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -36,7 +44,7 @@ public class Tab1Fragment extends Fragment {
         final LinearLayoutManager llm = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(llm);
 
-        MyRecycleViewAdapter adapter = new MyRecycleViewAdapter();
+        adapter = new FacebookFriendAdapter();
         mRecyclerView.setAdapter(adapter);
 
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -64,5 +72,28 @@ public class Tab1Fragment extends Fragment {
         });
 
         return view;
+    }
+
+   public static void getFriends(int offset) {
+        Tab2Fragment.request();
+    }
+    public static void clearList(){
+        adapter.clear();
+    }
+
+    public static void updateFriendList(JSONArray friendsArray){
+
+        for (int i = 0; i < friendsArray.length(); i++) {
+            JSONObject obj = friendsArray.optJSONObject(i);
+            FriendInfo info = new FriendInfo();
+
+            info.setId(obj.optString("id"));
+            info.setName(obj.optString("name"));
+            info.setAge(21);
+
+            adapter.update(info);
+        }
+        adapter.refresh();
+        loading = false;
     }
 }
